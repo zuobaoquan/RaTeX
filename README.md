@@ -249,6 +249,8 @@ CLI notes
 
 ### CJK / Unicode fallback
 
+Library callers using fixed fallback fonts can set `LayoutOptions::fallback_metrics` to a `FallbackGlyphMetrics` function. It supplies advance width, height and depth in unscaled em units for characters missing from the bundled KaTeX metric tables. The function should measure the same font used by the renderer; returning `None` retains the built-in estimates for that character. The default is `None`, and this layout hook does not load or discover fonts.
+
 By default RaTeX bundles only KaTeX fonts (19 faces for math symbols). Characters outside the KaTeX glyph set — CJK ideographs, emoji, Hangul, etc. — are rendered via a system Unicode font discovered automatically:
 
 1. **`RATEX_UNICODE_FONT`** env var — path to any `.ttf`/`.otf`/`.ttc`, with optional `#index` or `#FamilyName` selector for TTC collections (e.g. `NotoSansCJK.ttc#Noto Sans CJK SC`)

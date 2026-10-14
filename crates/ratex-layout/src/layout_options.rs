@@ -2,9 +2,19 @@ use ratex_font::{get_global_metrics, MathConstants};
 use ratex_types::color::Color;
 use ratex_types::math_style::MathStyle;
 
+/// Resolves fallback glyph advance width, height and depth in unscaled em units.
+///
+/// Return `None` to retain the built-in estimates for a character. The resolver
+/// should measure the same font that the renderer uses for that character.
+pub type FallbackGlyphMetrics = fn(char) -> Option<(f64, f64, f64)>;
+
 /// Layout options passed through the layout tree.
 #[derive(Debug, Clone)]
 pub struct LayoutOptions {
+    /// Optional metrics for glyphs absent from the bundled KaTeX metric tables.
+    ///
+    /// This only supplies layout dimensions; it does not load or discover fonts.
+    pub fallback_metrics: Option<FallbackGlyphMetrics>,
     pub style: MathStyle,
     pub color: Color,
     /// When set (e.g. in align/aligned), cap relation spacing to this many mu for consistency.
@@ -23,6 +33,7 @@ pub struct LayoutOptions {
 impl Default for LayoutOptions {
     fn default() -> Self {
         Self {
+            fallback_metrics: None,
             style: MathStyle::Display,
             color: Color::BLACK,
             align_relation_spacing: None,
@@ -44,6 +55,7 @@ impl LayoutOptions {
 
     pub fn with_style(&self, style: MathStyle) -> Self {
         Self {
+            fallback_metrics: self.fallback_metrics,
             style,
             color: self.color,
             align_relation_spacing: self.align_relation_spacing,
@@ -55,6 +67,7 @@ impl LayoutOptions {
 
     pub fn with_color(&self, color: Color) -> Self {
         Self {
+            fallback_metrics: self.fallback_metrics,
             style: self.style,
             color,
             align_relation_spacing: self.align_relation_spacing,

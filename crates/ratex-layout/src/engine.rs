@@ -698,6 +698,9 @@ fn missing_glyph_height_em(ch: char, m: &ratex_font::MathConstants) -> f64 {
 }
 
 fn missing_glyph_metrics_fallback(ch: char, options: &LayoutOptions) -> (f64, f64, f64) {
+    if let Some(metrics) = options.fallback_metrics.and_then(|resolve| resolve(ch)) {
+        return metrics;
+    }
     let m = get_global_metrics(options.style.size_index());
     let w = missing_glyph_width_em(ch);
     if w >= 0.99 {
