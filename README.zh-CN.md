@@ -248,6 +248,8 @@ CLI 说明
 
 ### CJK / Unicode 回退字体
 
+本 fork 维护的修改及 upstream 同步约定见 [Fork changes](docs/FORK_CHANGES.md)。
+
 使用固定回退字体的库调用方可以通过 `LayoutOptions::fallback_metrics` 设置一个 `FallbackGlyphMetrics` 函数，为 KaTeX 度量表中缺失的字符提供未缩放的 em 单位字形前进宽度、高度和深度。函数应度量渲染器使用的同一字体；对某个字符返回 `None` 时保留内置估算值。默认值为 `None`，这个布局接口不会加载或发现字体。
 
 默认 RaTeX 只捆绑 KaTeX 字体（19 种数学符号字形）。KaTeX 字形集之外的字符——CJK 表意文字、emoji、谚文等——通过系统 Unicode 字体自动发现并渲染：
